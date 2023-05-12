@@ -3,7 +3,7 @@ import discord
 import bot
 from discord.flags import Intents
 
-token = "MTEwNTIzMzE1MDg3MjkyNDI3MQ.GUQuhj.EYvH4rC3ei1BhdKK_vSqtR1hKJo01KxFmubctk"
+token = 'hi'
 
 class MyClient(discord.Client):
     async def on_ready(self):
