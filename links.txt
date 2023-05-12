@@ -1,0 +1,4 @@
+https://discordpy.readthedocs.io/en/stable/index.html
+https://quickchart.io/documentation/send-charts-discord-bot/
+https://blog.shahednasser.com/how-to-create-a-python-discord-bot-for-data-analysis/
+https://discordpy.readthedocs.io/en/stable/api.html?highlight=api%20reference
