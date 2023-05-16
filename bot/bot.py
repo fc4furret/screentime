@@ -10,6 +10,8 @@ intents.message_content = True
 intents.members = True
 bot = commands.Bot(command_prefix='>', intents=intents)
 
+bot.dispatch("member_play", )
+
 
 """
 All the events must be a coroutine. If they aren’t, 
