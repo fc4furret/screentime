@@ -7,4 +7,8 @@ class activity():
         """
         self.start = start
         self.end = end
+        self.time = start - end
         self.name = name
+
+    def convertTime():
+        pass
