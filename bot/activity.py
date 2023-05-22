@@ -1,8 +1,13 @@
+import datetime
+
+from datetime import datetime
+from datetime import timedelta
+
 class activity():
     def __init__(self, start, end, name) -> None:
         """
-        start = activity start time in unix epoch time(milliseconds since 1970)
-        end = activity end time in unix epoch time
+        start = activity start time in utc time 
+        end = activity end time in utc time
         name = activity name(string)
         """
         self.start = start
