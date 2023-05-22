@@ -3,7 +3,15 @@ import datetime
 from datetime import datetime
 from datetime import timedelta
 
-class activity():
+class activity:
+    def __init__(self):
+        self.start = 0
+        self.end = 0
+        self.time = 0
+        self.name = 0
+
+        
+
     def __init__(self, start, end, name) -> None:
         """
         start = activity start time in utc time 
