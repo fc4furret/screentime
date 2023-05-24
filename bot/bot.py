@@ -6,7 +6,7 @@ import charts
 
 from datetime import date
 from datetime import datetime
-from discord.ext import commands
+from discord.ext import commands, tasks
 
 
 token = 'hi'
@@ -16,7 +16,33 @@ intents.message_content = True
 intents.members = True
 intents.presences = True
 
-bot = commands.Bot(command_prefix='>', intents=intents)
+class MyBot(commands.Bot):
+    @tasks.loop(seconds=5)
+    async def memberStatus(ctx):
+        """
+        Rough logic outline, outputs an entry to data after every event ends. 
+        """
+        for i in users:
+            currA = get_user_activity(i)
+
+            last_check[i.name] = status[i.name]
+            status[i.name] = currA
+
+            b = last_check[i.name]
+
+            #print(last_check[i.name])
+            #print(status[i.name])
+            #print(' ----------------- ')
+
+            if (last_check[i.name] != None and status[i.name] == None):
+                #print(" -------------------------------------- hat")
+                data[i.name].append(activity(last_check[i.name].start, datetime.now(), last_check[i.name].name))
+                #data[i.name].append(1)
+
+        print("running!")
+    
+
+bot = MyBot(command_prefix='>', intents=intents)
 
 """
 All the events must be a coroutine. If they aren’t, 
@@ -45,29 +71,14 @@ async def on_ready():
         users.append(i)
         status[i.name] = get_user_activity(i)
         last_check[i.name] = None
+        data[i.name] = []
+    bot.memberStatus.start()
 
-#why is this functionality here again?
 @bot.event
 async def on_member_join(member):
     users.append(member)
     status[member.name] = member.activities
     last_check[member.name] = None
-
-@bot.check
-async def memberStatus(ctx):
-    """
-    Rough logic outline, outputs an entry to data after every event ends. 
-    """
-    for i in users:
-        currA = get_user_activity(i)
-
-        last_check[i.name] = status[i.name]
-        status[i.name] = currA
-
-        if (last_check[i.name] != None and last_check[i.name].type == discord.Activity and status[i.name] == None):
-            data[i.name].append(activity())
-
-    return True
            
 @bot.command()
 async def members(ctx):
@@ -81,17 +92,26 @@ async def ping(ctx):
 @bot.command()
 async def info(ctx):
     for i in users:
+
+        # try:
+        #     print(data[i.name])
+        # except:
+        #     print("no data")
+
         if (len(i.activities) > 0 and i.activities[0].type != discord.ActivityType.custom):
 
             #some errors with this so its just wrapped for now
-            try:
-                print(data[i.name])
-            except:
-                print("user is unknown")
-
             #await ctx.send(data[i.name].size())
             await ctx.send(i.activities[0].name)
         else:
             await ctx.send("no activities")
+
+@bot.command()
+async def show_data(ctx):
+    await ctx.send(data.items())
+    await ctx.send('hi there')
+    for i in users:
+        if (data.get(i.name) != None):
+            await ctx.send(data[i.name])
 
 bot.run(token)
