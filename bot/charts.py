@@ -1,17 +1,44 @@
 import quickchart
 from quickchart import QuickChart
+@bot.command()
+async def chart(ctx):
+    for key in data:
+        activities = data[key]
+        activity_names = []
+        activity_times = []
+        for i in activities:
+            activity_names.append(i.name)
+            activity_times.append(i.time)
+        qc = QuickChart()
+        qc.config = {
+            "type": "line",
+            "data": {
+                "type": "bar",
+                "labels": activity_names,
+                "datasets": [{
+                    "label": "screentime",
+                    "data": activity_times
 
-qc = QuickChart()
-qc.width = 500
-qc.height = 300
-qc.device_pixel_ratio = 2.0
-qc.config = {
-    "type": "bar",
+                }]
+            }
+        }
+
+        # Print a chart URL
+        print(key + ": " + qc.get_url())
+
+        # Print a short chart URL
+        print(key + ": " + qc.get_short_url())
+
+
+'''qc.config = {
+    "type": "line",
     "data": {
-        "labels": ["Hello world", "Test"],
+        "type": "bar",
+        "labels": ["Hello world", "Test",'a' 'b','c'],
         "datasets": [{
             "label": "Foo",
             "data": [1, 2]
+
         }]
     }
 }
@@ -20,4 +47,4 @@ qc.config = {
 print(qc.get_url())
 
 # Print a short chart URL
-print(qc.get_short_url())
+print(qc.get_short_url())'''
