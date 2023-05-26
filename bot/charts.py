@@ -1,7 +1,7 @@
 import quickchart
 from quickchart import QuickChart
-@bot.command()
-async def chart(ctx):
+
+def chart(ctx, data):
     for key in data:
         activities = data[key]
         activity_names = []

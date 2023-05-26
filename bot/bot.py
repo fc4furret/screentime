@@ -4,14 +4,16 @@ import datetime
 import charts
 #import main
 
+from quickchart import QuickChart
 from datetime import date
 from datetime import timezone
 from datetime import datetime
 from activity import activity
+from charts import chart
 from discord.ext import commands, tasks
 
 
-token = 'MTEwNTIzMzE1MDg3MjkyNDI3MQ.GWLYJ-.LdN-gSoTOJpKJlZKynI57u9z-1LVPDwn5K1AII'
+token = 'hi'
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -65,7 +67,6 @@ def get_user_activity(i : discord.Member) -> discord.Activity:
     else:
         return None
 
-
 @bot.event
 async def on_ready():
     print(f'Logged on as {bot.user.name} \n ---------')
@@ -95,10 +96,6 @@ async def ping(ctx):
 async def info(ctx):
     for i in users:
 
-        # try:
-        #     print(data[i.name])
-        # except:
-        #     print("no data")
 
         if (len(i.activities) > 0 and i.activities[0].type != discord.ActivityType.custom):
 
@@ -115,5 +112,35 @@ async def show_data(ctx):
     #for i in users:
         #if (data.get(i.name) != None):
             #await ctx.send(data[i.name])
+
+@bot.command()
+async def chart(ctx):
+    for key in users:
+        activities = data[key.name]
+        activity_names = []
+        activity_times = []
+        for i in activities:
+            activity_names.append(i.name)
+            activity_times.append((i.time.days * 1440) + (i.time.seconds / 60))
+
+        qc = QuickChart()
+        qc.config = {
+            "type": "line",
+            "data": {
+                "type": "bar",
+                "labels": activity_names,
+                "datasets": [{
+                    "label": "screentime",
+                    "data": activity_times
+
+                }]
+            }
+        }
+
+        # Print a chart URL
+        #await ctx.send(key.name + ": " + qc.get_url())
+
+        # Print a short chart URL
+        await ctx.send(key.name + ": " + qc.get_short_url())
 
 bot.run(token)

@@ -20,7 +20,7 @@ class activity:
         """
         self.start : datetime = start
         self.end : datetime = end
-        self.time : timedelta = start - end
+        self.time : timedelta = end - start
         self.name = name
 
     def __str__(self) -> str:
