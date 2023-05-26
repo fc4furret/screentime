@@ -5,11 +5,13 @@ import charts
 #import main
 
 from datetime import date
+from datetime import timezone
 from datetime import datetime
+from activity import activity
 from discord.ext import commands, tasks
 
 
-token = 'hi'
+token = 'MTEwNTIzMzE1MDg3MjkyNDI3MQ.GWLYJ-.LdN-gSoTOJpKJlZKynI57u9z-1LVPDwn5K1AII'
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -35,8 +37,8 @@ class MyBot(commands.Bot):
             #print(' ----------------- ')
 
             if (last_check[i.name] != None and status[i.name] == None):
-                #print(" -------------------------------------- hat")
-                data[i.name].append(activity(last_check[i.name].start, datetime.now(), last_check[i.name].name))
+                #print(" -------------------------------------- hat") 
+                data[i.name].append(activity(last_check[i.name].start, datetime.now(timezone.utc), last_check[i.name].name))
                 #data[i.name].append(1)
 
         print("running!")
@@ -110,8 +112,8 @@ async def info(ctx):
 async def show_data(ctx):
     await ctx.send(data.items())
     await ctx.send('hi there')
-    for i in users:
-        if (data.get(i.name) != None):
-            await ctx.send(data[i.name])
+    #for i in users:
+        #if (data.get(i.name) != None):
+            #await ctx.send(data[i.name])
 
 bot.run(token)

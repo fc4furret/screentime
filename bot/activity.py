@@ -12,15 +12,15 @@ class activity:
 
         
 
-    def __init__(self, start, end, name) -> None:
+    def __init__(self, start : datetime, end : datetime, name) -> None:
         """
         start = activity start time in utc time 
         end = activity end time in utc time
         name = activity name(string)
         """
-        self.start = start
-        self.end = end
-        self.time = start - end
+        self.start : datetime = start
+        self.end : datetime = end
+        self.time : timedelta = start - end
         self.name = name
 
     def __str__(self) -> str:
