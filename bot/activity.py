@@ -23,5 +23,8 @@ class activity:
         self.time = start - end
         self.name = name
 
+    def __str__(self) -> str:
+        return f'played {self.name} for {self.time} time'
+
     def convertTime():
         pass
