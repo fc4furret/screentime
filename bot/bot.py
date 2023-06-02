@@ -29,6 +29,9 @@ class MyBot(commands.Bot):
         for i in users:
             currA = get_user_activity(i)
 
+            if (status[i.name] == None and currA != None):
+                backup_time[i.name] = datetime.now(timezone.utc)
+
             last_check[i.name] = status[i.name]
             status[i.name] = currA
 
@@ -40,7 +43,8 @@ class MyBot(commands.Bot):
 
             if (last_check[i.name] != None and status[i.name] == None):
                 #print(" -------------------------------------- hat") 
-                data[i.name].append(activity(last_check[i.name].start, datetime.now(timezone.utc), last_check[i.name].name))
+                if (last_check[i.name].start == None): data[i.name].append(activity(backup_time[i.name], datetime.now(timezone.utc), last_check[i.name].name))
+                else: data[i.name].append(activity(last_check[i.name].start, datetime.now(timezone.utc), last_check[i.name].name))
                 #data[i.name].append(1)
 
         print("running!")
@@ -58,6 +62,7 @@ def functions.
 users = []
 status: dict[str, discord.Activity] = {}
 last_check: dict[str, discord.Activity] = {}
+backup_time: dict[str, datetime] = {}
 
 data: dict[str, list] = {}
 
@@ -75,6 +80,7 @@ async def on_ready():
         status[i.name] = get_user_activity(i)
         last_check[i.name] = None
         data[i.name] = []
+        backup_time[i.name] = datetime.now(timezone.utc)
     bot.memberStatus.start()
 
 @bot.event
@@ -125,7 +131,7 @@ async def chart(ctx):
 
         qc = QuickChart()
         qc.config = {
-            "type": "line",
+            "type": "bar",
             "data": {
                 "type": "bar",
                 "labels": activity_names,
