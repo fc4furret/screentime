@@ -10,8 +10,6 @@ class activity:
         self.time = 0
         self.name = 0
 
-        
-
     def __init__(self, start : datetime, end : datetime, name) -> None:
         """
         start = activity start time in utc time 

@@ -10,8 +10,7 @@ from datetime import timezone
 from datetime import datetime
 from activity import activity
 from charts import chart
-from discord.ext import commands, tasks
-
+from discord.ext import commands, tasks;
 
 token = 'hi'
 
@@ -35,19 +34,16 @@ class MyBot(commands.Bot):
             last_check[i.name] = status[i.name]
             status[i.name] = currA
 
-            b = last_check[i.name]
-
-            #print(last_check[i.name])
-            #print(status[i.name])
-            #print(' ----------------- ')
 
             if (last_check[i.name] != None and status[i.name] == None):
                 #print(" -------------------------------------- hat") 
-                if (last_check[i.name].start == None): data[i.name].append(activity(backup_time[i.name], datetime.now(timezone.utc), last_check[i.name].name))
-                else: data[i.name].append(activity(last_check[i.name].start, datetime.now(timezone.utc), last_check[i.name].name))
+                #if (last_check[i.name].start == None): data[i.name].append(activity(backup_time[i.name], datetime.now(timezone.utc), last_check[i.name].name))
+                data[i.name].append(activity(backup_time[i.name], datetime.now(timezone.utc), last_check[i.name].name))
+                #else: data[i.name].append(activity(last_check[i.name].start, datetime.now(timezone.utc), last_check[i.name].name))
                 #data[i.name].append(1)
 
-        print("running!")
+                print('added!') 
+        #print("running!")
     
 
 bot = MyBot(command_prefix='>', intents=intents)
@@ -63,8 +59,8 @@ users = []
 status: dict[str, discord.Activity] = {}
 last_check: dict[str, discord.Activity] = {}
 backup_time: dict[str, datetime] = {}
-
 data: dict[str, list] = {}
+#presentation: dict[str, dict[str, list]] = {}
 
 def get_user_activity(i : discord.Member) -> discord.Activity:
     if (len(i.activities) > 0 and i.activities[0].type != discord.ActivityType.custom):
@@ -101,11 +97,8 @@ async def ping(ctx):
 @bot.command()
 async def info(ctx):
     for i in users:
-
-
         if (len(i.activities) > 0 and i.activities[0].type != discord.ActivityType.custom):
 
-            #some errors with this so its just wrapped for now
             #await ctx.send(data[i.name].size())
             await ctx.send(i.activities[0].name)
         else:
@@ -125,9 +118,22 @@ async def chart(ctx):
         activities = data[key.name]
         activity_names = []
         activity_times = []
+
+        ###
+
+        presentation = {}
         for i in activities:
-            activity_names.append(i.name)
-            activity_times.append((i.time.days * 1440) + (i.time.seconds / 60))
+            if (i.name in presentation):
+                presentation[i.name] += i.time.total_seconds() / 60
+            else:
+                presentation[i.name] = i.time.total_seconds() / 60
+
+        for i in presentation:
+            activity_names.append(i)
+            activity_times.append(presentation[i])
+            print(presentation[i] * 60)
+
+        ###
 
         qc = QuickChart()
         qc.config = {
